@@ -1,0 +1,26 @@
+/* added body background color so that it's softer on the eyes */
+body {
+  background-color: rgb(104, 131, 131);
+}
+/* added h1 body to place and center title with padding from top so that it looks nice */
+header {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding-top: 2rem;
+}
+
+main {
+  display: flex;
+  height: 400px;
+  justify-content: center;
+  align-items: center;
+}
+
+#startButton {
+  font-weight: bold;
+  padding: 15px;
+  border-radius: 100px;
+  background-color: rgb(136, 25, 25);
+}
+
