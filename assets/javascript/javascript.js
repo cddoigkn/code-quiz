@@ -17,6 +17,7 @@ var prompt = document.querySelector("#questions")
 var index = 0
 
 var quizActive = false;
+var currentQuestion = 0;
 var secondsLeft = 120;
 
 var questions = [
@@ -26,8 +27,8 @@ var questions = [
     correct: 2
   },
   {
-    question: "Can you understand German?",
-    choices: ["schrecklich", "Ja", "gut", "schon"],
+    question: "What's 2 + 2?",
+    choices: ["3", "4", "44", "22"],
     correct: 1
   },
   {
@@ -51,7 +52,7 @@ function setTime() {
   var timerInterval = setInterval(function() {
     secondsLeft--;
     timeEl.textContent = secondsLeft + " seconds remaining!"
-    if(secondsLeft === 0) {
+    if(secondsLeft <= 0) {
       clearInterval(timerInterval);
       timeEl.textContent = ("You're too Slow!");
     quizActive = false
@@ -63,14 +64,38 @@ function setTime() {
 setButton.addEventListener("click", function() {
   if (!quizActive) {
     setTime();
-    showQuestion(0);
+    setButton.setAttribute("class", "ninjutsu");
+    currentQuestion = 0;
+    showQuestion(currentQuestion);
     quizActive = true;
   }
 })
-
+// getting prompt element then creating choices for the question, then assigning the choices to a function call to check if they are correct or not, if correct then we will continue the quiz, if not then they will lose time
 function showQuestion(index) {
+  if (index > questions.length ){
+    quizComplete();
+  }
   var question = questions[index];
   var questionEl = document.createElement("span");
   questionEl.textContent = question.question;
+  prompt.appendChild(questionEl);
+  for (let i = 0;i<question.choices.length;i++){
+    var answerEl = document.createElement("button");
+    answerEl.textContent = question.choices[i]
+    answerEl.value = i;
+    answerEl.addEventListener("click", function(event) {
+      if (event.target.value==question.correct) {
+        // had to do a quick google search for this cheeky one
+        prompt.innerHTML = "";
+        showQuestion(currentQuestion++);
+      } else {
+        secondsLeft = secondsLeft - 5
+      }
+    })
+    prompt.appendChild(answerEl)
+};
+}
 
+function quizComplete() {
+  var endOfQuiz = document.createElement()
 }
