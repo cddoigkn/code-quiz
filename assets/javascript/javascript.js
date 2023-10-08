@@ -10,6 +10,7 @@
 // create a function that is okay with one answer
 // create a function that deducts 10 seconds from the time remaining whenever an incorrect answer is chosen
 
+var scoresList = document.querySelector("#scores");
 var currentScore = 0
 var submitScore = document.querySelector("#submitScore")
 var endScreenInput = document.querySelector("#endScreenInput")
@@ -128,4 +129,16 @@ function quizComplete() {
   endScreen.setAttribute("class","");
   prompt.setAttribute("class","ninjutsu");
   clearInterval(timerInterval);
+  displayScores();
+}
+
+function displayScores() {
+  scoresList.innerHTML = "";
+  var scores = JSON.parse(window.localStorage.getItem("score"));
+  if (scores){
+      for(let i; i < scores.length; i++)
+        var scoreEl = document.createElement('li');
+        scoreEl.textContent = scores[i].name + " - " + scores[i].score;
+        scoresList.appendChild(scoreEl);
+  }
 }
