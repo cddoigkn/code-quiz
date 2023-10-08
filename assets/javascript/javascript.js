@@ -10,11 +10,15 @@
 // create a function that is okay with one answer
 // create a function that deducts 10 seconds from the time remaining whenever an incorrect answer is chosen
 
-
+var currentScore = 0
+var submitScore = document.querySelector("#submitScore")
+var endScreenInput = document.querySelector("#endScreenInput")
+var endScreen = document.querySelector("#endScreen")
 var timeEl = document.querySelector(".time")
 var setButton = document.querySelector("#startButton")
 var prompt = document.querySelector("#questions")
 var index = 0
+var timerInterval = ""
 
 var quizActive = false;
 var currentQuestion = 0;
@@ -32,24 +36,45 @@ var questions = [
     correct: 1
   },
   {
-    question: "how was the weather today?",
-    choices: ["a", "b", "c", "d"],
+    question: "What year did 9/11 happen in?",
+    choices: ["911 AD", "911 BC", "2023", "2001"],
     correct: 3
   },
   {
-    question: "how was the weather today?",
-    choices: ["a", "b", "c", "d"],
+    question: "What male animal is capable of becoming pregnant?",
+    choices: ["Sea Turtle", "Monkey", "Horse", "Seahorse"],
     correct: 3
   },
   {
-    question: "how was the weather today?",
-    choices: ["a", "b", "c", "d"],
+    question: "What is the average air velocity of an unladen swallow?",
+    choices: ["African or European?", "Well I don't know that", "Oh no", "Nobody likes the French!"],
     correct: 0
   },
 ]
 
+submitScore.addEventListener("click", function() {
+  var score = JSON.parse(window.localStorage.getItem("score"));
+if(score){
+  score.push({
+    name:input.value,
+    score:currentScore
+  })
+  score.sort();
+} else {
+  score = [
+      {
+          name: input.value,
+          score: currentScore
+      }
+  ]
+}
+window.localStorage.setItem("score",JSON.stringify(score));
+endScreen.setAttribute("class","ninjutsu");
+})
+// ninjutsu makes things hide
+//set time piece so that we can get time a movin'
 function setTime() {
-  var timerInterval = setInterval(function() {
+  timerInterval = setInterval(function() {
     secondsLeft--;
     timeEl.textContent = secondsLeft + " seconds remaining!"
     if(secondsLeft <= 0) {
@@ -66,13 +91,14 @@ setButton.addEventListener("click", function() {
     setTime();
     setButton.setAttribute("class", "ninjutsu");
     currentQuestion = 0;
+    currentScore = 0; 
     showQuestion(currentQuestion);
     quizActive = true;
   }
 })
 // getting prompt element then creating choices for the question, then assigning the choices to a function call to check if they are correct or not, if correct then we will continue the quiz, if not then they will lose time
 function showQuestion(index) {
-  if (index > questions.length ){
+  if (index >= questions.length ){
     quizComplete();
   }
   var question = questions[index];
@@ -87,7 +113,9 @@ function showQuestion(index) {
       if (event.target.value==question.correct) {
         // had to do a quick google search for this cheeky one
         prompt.innerHTML = "";
-        showQuestion(currentQuestion++);
+        currentQuestion++
+        currentScore++
+        showQuestion(currentQuestion);
       } else {
         secondsLeft = secondsLeft - 5
       }
@@ -97,5 +125,7 @@ function showQuestion(index) {
 }
 
 function quizComplete() {
-  var endOfQuiz = document.createElement()
+  endScreen.setAttribute("class","");
+  prompt.setAttribute("class","ninjutsu");
+  clearInterval(timerInterval);
 }
